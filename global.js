@@ -48,3 +48,4 @@ let showPlayer = false;
 
 
 
+console.log('game start');
