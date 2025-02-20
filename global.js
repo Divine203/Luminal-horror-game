@@ -46,6 +46,3 @@ let render3D = false;
 let shouldDraw = true;
 let showPlayer = false;
 
-
-
-console.log('game start');
