@@ -66,11 +66,11 @@ class _3DProjection {
             
 
             // Calculate sprite height and width
-            const spriteHeight = (cvs.height / e.distance) * e.projData.scaleFactor;
+            const spriteHeight = (cvs.height / Math.round(e.distance)) * e.projData.scaleFactor;
             const spriteWidth = spriteHeight * (e.projData.ratio[0] / e.projData.ratio[1]); // Adjust aspect ratio as needed
             const shouldDraw = screenX > -spriteWidth / 2 && screenX < cvs.width + spriteWidth / 2; // Draw the sprite if it's within the screen bounds
 
-            const yShift = Math.abs(Math.sin(angleDiff) * 50 / (e.distance) * 600) - (spriteHeight / e.projData.spriteHeightDenominator);
+            const yShift = Math.abs(Math.sin(angleDiff) * 50 / (e.distance) * 100) - (spriteHeight / e.projData.spriteHeightDenominator);
 
             this.gameEntitiesToDraw[index] = {
                 image: e.image,

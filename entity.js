@@ -43,4 +43,5 @@ class Entity {
 gameEntities = [
     new Entity({ x: 580, y: 50, width: 20, heigth: 50, type: EntityTypes.FLOWER_VASE, imgName: 'flower-vase.png', isStatic: true }),
     new Entity({ x: 380, y: 150, width: 20, heigth: 50, type: EntityTypes.GHOST, imgName: 'ghost.png', isStatic: false }),
+    new Entity({ x: 660, y: 150, width: 20, heigth: 50, type: EntityTypes.TEDDY, imgName: 'teddy.png', isStatic: true })
 ];

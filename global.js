@@ -28,6 +28,7 @@ const keys = {
 const EntityTypes = {
     FLOWER_VASE: 'flowerVase',
     GHOST: 'ghost',
+    TEDDY: 'teddy',
 };
 
 const EntityProjData = {
@@ -40,7 +41,12 @@ const EntityProjData = {
         scaleFactor: 200,
         ratio: [16,23],
         spriteHeightDenominator: 3
-    }
+    },
+    teddy: {
+        scaleFactor: 50,
+        ratio: [133,128],
+        spriteHeightDenominator: 3
+    },
 }
 
 let player;
