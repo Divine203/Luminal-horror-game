@@ -64,7 +64,6 @@ class Player {
     }
 
     rayCastMap(ray, mapLines) {
-
         let closestIntersection = null;
         let minDistance = Infinity;
 

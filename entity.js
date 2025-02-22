@@ -1,5 +1,5 @@
 class Entity {
-    constructor({ x, y, width, heigth, type, isStatic }) {
+    constructor({ x, y, width, heigth, type, imgName, isStatic }) {
         this.pos = {
             x,
             y
@@ -8,8 +8,11 @@ class Entity {
         this.heigth = heigth;
         this.type = type;
         this.isStatic = isStatic;
+        this.projData = EntityProjData[type];
         this.image = new Image();
-        this.image.src = './resource/assets/flower-vase.png';
+        this.image.src = `./resource/assets/${imgName}`;
+
+        
 
         this.dx;
         this.dy;
@@ -38,5 +41,6 @@ class Entity {
 }
 
 gameEntities = [
-    new Entity({ x: 580, y: 50, width: 20, heigth: 50, type: EntityTypes.FLOWER_VASE, isStatic: true })
+    new Entity({ x: 580, y: 50, width: 20, heigth: 50, type: EntityTypes.FLOWER_VASE, imgName: 'flower-vase.png', isStatic: true }),
+    new Entity({ x: 380, y: 150, width: 20, heigth: 50, type: EntityTypes.GHOST, imgName: 'ghost.png', isStatic: false }),
 ];

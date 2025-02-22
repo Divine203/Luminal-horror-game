@@ -247,7 +247,11 @@ class Map {
             for (let j = 0; j < this.nodes.length; j++) {
                 this.nodes[j].y = this.nodes[j].y - this.scrollSpeed;
             }
+            for (let k = 0; k < gameEntities.length; k++) {
+                gameEntities[k].pos.y -= this.scrollSpeed;
+            }
             player.pos.y -= this.scrollSpeed;
+
 
         } else if (keys.u.pressed) {
             for (let i = 0; i < this.mapLines.length; i++) {
@@ -256,6 +260,9 @@ class Map {
             }
             for (let j = 0; j < this.nodes.length; j++) {
                 this.nodes[j].y = this.nodes[j].y + this.scrollSpeed;
+            }
+            for (let k = 0; k < gameEntities.length; k++) {
+                gameEntities[k].pos.y += this.scrollSpeed;
             }
             player.pos.y += this.scrollSpeed;
 
@@ -267,6 +274,9 @@ class Map {
             for (let j = 0; j < this.nodes.length; j++) {
                 this.nodes[j].x = this.nodes[j].x - this.scrollSpeed;
             }
+            for (let k = 0; k < gameEntities.length; k++) {
+                gameEntities[k].pos.x -= this.scrollSpeed;
+            }
             player.pos.x -= this.scrollSpeed;
 
         } else if (keys.h.pressed) {
@@ -276,6 +286,9 @@ class Map {
             }
             for (let j = 0; j < this.nodes.length; j++) {
                 this.nodes[j].x = this.nodes[j].x + this.scrollSpeed;
+            }
+            for (let k = 0; k < gameEntities.length; k++) {
+                gameEntities[k].pos.x += this.scrollSpeed;
             }
             player.pos.x += this.scrollSpeed;
         }

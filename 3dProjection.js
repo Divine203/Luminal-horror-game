@@ -18,7 +18,7 @@ class _3DProjection {
         this.gameEntities = gameEntities;
 
         this.wallSlicesToDraw = [];
-        this.gameEntitiesProjData = [];
+        this.gameEntitiesToDraw = [];
     }
 
 
@@ -63,14 +63,16 @@ class _3DProjection {
             // Calculate screenX based on the angle difference and FOV
             const screenX = (cvs.width / 2) * (1 + angleDiff / ((player.FOV * Math.PI / 180) / 2));
 
-            const yShift = Math.abs(Math.sin(angleDiff) * 50 / ((e.distance)) * 600);
+            
 
             // Calculate sprite height and width
-            const spriteHeight = (cvs.height / e.distance) * this.entityScaleFactor;
-            const spriteWidth = spriteHeight * (1 / 3); // Adjust aspect ratio as needed
+            const spriteHeight = (cvs.height / e.distance) * e.projData.scaleFactor;
+            const spriteWidth = spriteHeight * (e.projData.ratio[0] / e.projData.ratio[1]); // Adjust aspect ratio as needed
             const shouldDraw = screenX > -spriteWidth / 2 && screenX < cvs.width + spriteWidth / 2; // Draw the sprite if it's within the screen bounds
 
-            this.gameEntitiesProjData[index] = {
+            const yShift = Math.abs(Math.sin(angleDiff) * 50 / (e.distance) * 600) - (spriteHeight / e.projData.spriteHeightDenominator);
+
+            this.gameEntitiesToDraw[index] = {
                 image: e.image,
                 xPos: screenX - spriteWidth / 2,
                 yPos: (cvs.height / 2) + yShift,
@@ -84,7 +86,7 @@ class _3DProjection {
     }
 
     projectTo3D() {
-        let world = [...this.wallSlicesToDraw, ...this.gameEntitiesProjData];
+        let world = [...this.wallSlicesToDraw, ...this.gameEntitiesToDraw];
         world.sort((a, b) => b.distanceFromPlayer - a.distanceFromPlayer);
 
         world.forEach((el) => {

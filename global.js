@@ -3,9 +3,6 @@ const textureSelect = document.getElementById('textureSelect');
 const form = document.querySelector('.form--cont');
 const ctx = cvs.getContext('2d');
 
-// Set to default behavior (overwrites previous drawings)
-// ctx.globalCompositeOperation = "source-over";
-
 cvs.width = 1080;
 cvs.height = 620;
 
@@ -30,7 +27,21 @@ const keys = {
 
 const EntityTypes = {
     FLOWER_VASE: 'flowerVase',
+    GHOST: 'ghost',
 };
+
+const EntityProjData = {
+    flowerVase: {
+        scaleFactor: 100.5,
+        ratio: [1,3],
+        spriteHeightDenominator: 16
+    },
+    ghost: {
+        scaleFactor: 200,
+        ratio: [16,23],
+        spriteHeightDenominator: 3
+    }
+}
 
 let player;
 let gameEntities;
