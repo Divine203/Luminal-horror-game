@@ -8,13 +8,14 @@ const renderCanvas = (engine) => {
     }
 
     if (render3D) {
+        projection.projectFloorAndCeiling();
         projection.prepWallData(player.rays);
         projection.prepEntities();
         projection.projectTo3D();
     }
 
     requestAnimationFrame(engine);
-}
+}   
 
 if (shouldDraw) {
     form.style.display = 'none';

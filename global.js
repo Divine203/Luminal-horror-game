@@ -45,7 +45,7 @@ const EntityProjData = {
     teddy: {
         scaleFactor: 50,
         ratio: [133,128],
-        spriteHeightDenominator: 3
+        spriteHeightDenominator: 999999999999
     },
 }
 

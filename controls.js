@@ -157,11 +157,15 @@ const controls = () => {
 
 const movement = () => {
     if (keys.up.pressed) {
-        player.pos.x += player.dx;
-        player.pos.y += player.dy;
+        // if (player.canMoveForward) {
+            player.pos.x += player.dx;
+            player.pos.y += player.dy;
+        // }
     } else if (keys.down.pressed) {
-        player.pos.x += -player.dx;
-        player.pos.y += -player.dy;
+        // if (player.canMoveBack) {
+            player.pos.x += -player.dx;
+            player.pos.y += -player.dy;
+        // }
     }
     if (keys.left.pressed) {
         player.rotVel = -player.rotSpeed;

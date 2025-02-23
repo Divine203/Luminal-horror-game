@@ -20,6 +20,9 @@ class Player {
         this.rayLenth = cvs.width * 2;
         this.rays = [];
 
+        this.canMoveForward = false;
+        this.canMoveBack = false;
+
         this.FOV = 90; // field of view
         this.numRays = 360;
         this.rayoffsetAngles = Array.from({ length: this.numRays }, (v, k) => (k * (this.FOV / this.numRays) - (this.FOV / 2))); // [1, ...90]

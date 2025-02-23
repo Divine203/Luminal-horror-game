@@ -12,9 +12,12 @@ class TextureMapping {
         this.wall4 = new Image();
         this.wall4.src = `${this.path}wall4.jpg`;
         this.pillar = new Image();
-        this.pillar.src = `${this.path}pillar.jpg`
+        this.pillar.src = `${this.path}pillar.jpg`;
 
         this.currentTexture = 'wall1';
+
+        this.sky = new Image();
+        this.sky.src = `${this.path}sky.jpeg`;
 
         this.ratio = [1,3];
     }

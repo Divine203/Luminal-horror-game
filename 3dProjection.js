@@ -63,7 +63,7 @@ class _3DProjection {
             // Calculate screenX based on the angle difference and FOV
             const screenX = (cvs.width / 2) * (1 + angleDiff / ((player.FOV * Math.PI / 180) / 2));
 
-            
+
 
             // Calculate sprite height and width
             const spriteHeight = (cvs.height / Math.round(e.distance)) * e.projData.scaleFactor;
@@ -90,8 +90,18 @@ class _3DProjection {
         world.sort((a, b) => b.distanceFromPlayer - a.distanceFromPlayer);
 
         world.forEach((el) => {
+            let brightness = Math.max(0, Math.min(2, 1 - (el.distanceFromPlayer / this.maxDistance)));
             if (el.isWall) {
                 if (el.ray.iP) {
+                    ctx.globalAlpha = 1;
+                    ctx.fillStyle = 'black';
+                    ctx.fillRect(
+                        el.index * this.sliceWidth,
+                        this.horizon - el.wallHeight / 2,
+                        this.sliceWidth,
+                        el.wallHeight
+                    );
+                    ctx.globalAlpha = brightness;
                     ctx.drawImage(
                         el.textureMap,
                         el.adjustedXCut, // cx
@@ -103,9 +113,12 @@ class _3DProjection {
                         this.sliceWidth,
                         el.wallHeight
                     );
+
                 }
             } else {
                 if (el.shouldDraw) {
+                    ctx.globalAlpha = 1;
+                    ctx.filter = `brightness(${brightness})`;
                     ctx.drawImage(
                         el.image,
                         el.xPos, // Center the sprite horizontally
@@ -115,7 +128,26 @@ class _3DProjection {
                     );
                 }
             }
+
+            ctx.globalAlpha = 1;
+            ctx.filter = "none";
         });
+    }
+
+
+    projectFloorAndCeiling() {
+        ctx.globalAlpha = 1;
+        ctx.filter = "none";
+        // ceiling
+        // ctx.drawImage(textureMap.sky, 0, 0, cvs.width, cvs.height/2)
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, cvs.height / 2, cvs.width, cvs.height / 2);
+
+        // floor
+        ctx.fillStyle = '#202020';
+        ctx.fillRect(0, cvs.height / 2, cvs.width, cvs.height / 2);
+        ctx.globalAlpha = 1;
+        ctx.filter = "none";
     }
 
 
