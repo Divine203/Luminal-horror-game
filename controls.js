@@ -2,7 +2,7 @@ const controls = () => {
     document.addEventListener('keydown', (e) => {
         switch (e.key) {
             case 'ArrowUp':
-                if (keys.down.pressed === false) {
+                if (keys.down.pressed === false && player.canMoveForward) {
                     keys.up.pressed = true;
                 }
                 break;
@@ -17,7 +17,7 @@ const controls = () => {
                 }
                 break;
             case 'ArrowDown':
-                if (keys.up.pressed === false) {
+                if (keys.up.pressed === false && player.canMoveBack) {
                     keys.down.pressed = true;
                 }
                 break;
@@ -157,15 +157,15 @@ const controls = () => {
 
 const movement = () => {
     if (keys.up.pressed) {
-        // if (player.canMoveForward) {
+        if (player.canMoveForward) {
             player.pos.x += player.dx;
             player.pos.y += player.dy;
-        // }
+        }
     } else if (keys.down.pressed) {
-        // if (player.canMoveBack) {
+        if (player.canMoveBack) {
             player.pos.x += -player.dx;
             player.pos.y += -player.dy;
-        // }
+        }
     }
     if (keys.left.pressed) {
         player.rotVel = -player.rotSpeed;

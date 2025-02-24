@@ -20,6 +20,23 @@ class Utils {
         return null; // No intersection
     }
 
+    checkLineIntersection(a, b) {
+        const BUFFER = 1; // Slightly expand collision area
+    
+        const det = (b.x2 - b.x1) * (a.y2 - a.y1) - (b.y2 - b.y1) * (a.x2 - a.x1);
+        if (Math.abs(det) < 0.0001) return false; // Parallel lines
+    
+        const lambda = ((b.y2 - b.y1) * (b.x2 - a.x1) + (b.x1 - b.x2) * (b.y2 - a.y1)) / det;
+        const gamma = ((a.y1 - a.y2) * (b.x2 - a.x1) + (a.x2 - a.x1) * (b.y2 - a.y1)) / det;
+    
+        let result = (-BUFFER <= lambda && lambda <= 1 + BUFFER) && (-BUFFER <= gamma && gamma <= 1 + BUFFER);
+
+        // console.log(result);
+
+        return result;
+    }
+    
+
     isPointOnSquare(px, py, sqr) { //sqr => {x, y, scale}
         return (
             px >= sqr.x - (sqr.scale + sqr.scale * 2) &&
@@ -28,6 +45,7 @@ class Utils {
             py <= sqr.y + (sqr.scale + sqr.scale * 2)
         );
     }
+    
 
     isPlayerInSector(playerPos, lines) { //{x, y}, [{x1, y1, x2, y2}]
         let inside = false;

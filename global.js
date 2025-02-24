@@ -61,5 +61,5 @@ let projection;
 
 let render3D = false;
 let shouldDraw = true;
-let showPlayer = false;
+let showPlayer = true;
 

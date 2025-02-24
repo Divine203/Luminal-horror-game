@@ -19,15 +19,31 @@ class Player {
         this.defaultRayLength = cvs.width * 2;
         this.rayLenth = cvs.width * 2;
         this.rays = [];
+        this.backRay;
 
-        this.canMoveForward = false;
-        this.canMoveBack = false;
+        this.canMoveForward = true;
+        this.canMoveBack = true;
 
         this.FOV = 90; // field of view
         this.numRays = 360;
         this.rayoffsetAngles = Array.from({ length: this.numRays }, (v, k) => (k * (this.FOV / this.numRays) - (this.FOV / 2))); // [1, ...90]
 
         this.isInSector = false;
+    }
+
+    drawCollisionBox() {
+        let posX = (-this.width / 2) * 1.5;
+        let posY = (-this.height / 2) * 1.5;
+        let width = this.width * 1.5;
+        let height = this.height * 1.5;
+        ctx.save();
+        ctx.beginPath();
+        ctx.translate(this.pos.x + this.width / 2, this.pos.y + this.height / 2);
+        ctx.rotate(this.angle * Math.PI / 180);
+        ctx.rect(posX, posY, width, height);
+        ctx.fillStyle = "rgba(255, 0, 0, 0.4)";
+        ctx.fill();
+        ctx.restore();
     }
 
     drawRotatingRect() {
@@ -41,7 +57,40 @@ class Player {
         ctx.restore();
     }
 
+    checkWallCollisions() {
+        const centerFrontRay = this.rays[(this.rays.length/2)-1];
+        const backRay = this.backRay;
+
+        if(centerFrontRay.d < 30) {
+            this.canMoveForward = false;
+        } else {
+            this.canMoveForward = true;
+        }
+
+        if(backRay.l < 30) {
+            this.canMoveBack = false;
+        } else {
+            this.canMoveBack = true;
+        }
+    }
+
     drawRays() {
+        // backRay
+        this.backRay = new Ray();
+        let reverseAngleOfPlayer = 180;
+        let { x1, y1, x2, y2 } = this.calcRayPoints(reverseAngleOfPlayer, this.rayLenth);
+        this.backRay.angle = reverseAngleOfPlayer;
+        this.backRay.x1 = x1;
+        this.backRay.y1 = y1;
+        this.backRay.x2 = x2;
+        this.backRay.y2 = y2;
+        this.rayCastMap(this.backRay, map.mapLines);
+        
+        if (!render3D) {
+            this.backRay.drawRay(this.backRay.angle, this.angle, this.width, this.height, this.pos.x, this.pos.y);
+        }
+
+        //
         for (let i = 0; i < this.rayoffsetAngles.length; i++) {
             let ray = new Ray();
             let { x1, y1, x2, y2 } = this.calcRayPoints(this.rayoffsetAngles[i], this.rayLenth);
@@ -107,10 +156,10 @@ class Player {
         if (!render3D) {
             this.drawRotatingRect();
         }
+
         this.drawRays();
         this.movement();
-
-        this.isInSector = utils.isPlayerInSector(player.pos, map.mapLines);
+        this.checkWallCollisions();
     }
 }
 
