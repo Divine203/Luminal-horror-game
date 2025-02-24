@@ -40,7 +40,7 @@ const EntityProjData = {
     ghost: {
         scaleFactor: 200,
         ratio: [16,23],
-        spriteHeightDenominator: 3
+        spriteHeightDenominator: 2
     },
     teddy: {
         scaleFactor: 50,
