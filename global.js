@@ -31,6 +31,13 @@ const EntityTypes = {
     TEDDY: 'teddy',
 };
 
+const GHOST_STATES = {
+    FOLLOW_PLAYER: 'followPlayer',
+    APPEAR_BEHIND: 'appearBehind',
+    APPEAR_INFRONT: 'appearInfront',
+    ZOOM_PAST: 'zoomPass'
+};
+
 const EntityProjData = {
     flowerVase: {
         scaleFactor: 100.5,
@@ -40,7 +47,7 @@ const EntityProjData = {
     ghost: {
         scaleFactor: 200,
         ratio: [16,23],
-        spriteHeightDenominator: 2
+        spriteHeightDenominator: 2.3
     },
     teddy: {
         scaleFactor: 50,

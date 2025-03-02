@@ -7,15 +7,24 @@ const renderCanvas = (engine) => {
         player.update();
     }
 
+    gameEntities.forEach(e => {
+        e.update();
+    })
+
     if (render3D) {
         projection.projectFloorAndCeiling();
         projection.prepWallData(player.rays);
         projection.prepEntities();
         projection.projectTo3D();
+        player.drawPlayerHands3D();
     }
 
     requestAnimationFrame(engine);
-}   
+} 
+
+gameEntities.forEach(e => {
+    e.applyLogic();
+})
 
 if (shouldDraw) {
     form.style.display = 'none';

@@ -13,13 +13,18 @@ class TextureMapping {
         this.wall4.src = `${this.path}wall4.jpg`;
         this.pillar = new Image();
         this.pillar.src = `${this.path}pillar.jpg`;
+        this.door = new Image();
+        this.door.src = `${this.path}door.jpg`;
 
         this.currentTexture = 'wall1';
 
-        this.sky = new Image();
-        this.sky.src = `${this.path}sky.jpeg`;
+        // this.sky = new Image();
+        // this.sky.src = `${this.path}sky2.png`;
 
-        this.ratio = [1,3];
+        this.playerHand = new Image();
+        this.playerHand.src = `${this.path}hand.png`;
+        this.playerHandGun = new Image();
+        this.playerHandGun.src = `${this.path}hand-gun.png`;
     }
 
     calcTextureMap(wc, ip) { // wallCoordinates, intersectionPoint  

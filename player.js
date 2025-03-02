@@ -5,7 +5,7 @@ class Player {
             y: 200
         }
         this.speed = 6;
-        this.rotSpeed = 2;
+        this.rotSpeed = 2.5;
         this.rotVel = 0;
         this.width = 30;
         this.height = 30;
@@ -29,6 +29,7 @@ class Player {
         this.rayoffsetAngles = Array.from({ length: this.numRays }, (v, k) => (k * (this.FOV / this.numRays) - (this.FOV / 2))); // [1, ...90]
 
         this.isInSector = false;
+        
     }
 
     drawCollisionBox() {
@@ -55,6 +56,15 @@ class Player {
         ctx.fillStyle = "green";
         ctx.fill();
         ctx.restore();
+    }
+
+    drawPlayerHands3D() {
+
+        const img = textureMap.playerHandGun;
+
+        ctx.filter = `brightness(.5)`;
+        ctx.drawImage(img, 450, (cvs.height - 260), img.width/4, img.height/4);
+        ctx.filter = "none";
     }
 
     checkWallCollisions() {

@@ -4,44 +4,146 @@ class Entity {
             x,
             y
         };
+
         this.width = width;
         this.heigth = heigth;
         this.type = type;
         this.isStatic = isStatic;
         this.projData = EntityProjData[type];
+        this.imgName = imgName;
         this.image = new Image();
-        this.image.src = `./resource/assets/${imgName}`;
-
-        
+        this.image.src = `./resource/assets/${this.imgName}`;
 
         this.dx;
         this.dy;
         this.distance;
         this.angleToPlayer; //radians
+
+        this.speed = 3;
+
+        this.ghostState = GHOST_STATES.FOLLOW_PLAYER;
+        this.hasTeleportedFront = false;
+        this.hasTeleportedBack = false;
+        this.stateTimer = 0;
+        this.minStateTime = 3000; // 3 seconds minimum before switching
+        this.maxStateTime = 7000; // 7 seconds max before switching
+
+        if (this.type === EntityTypes.GHOST) {
+            this.pickNewState();
+        }
     }
 
     draw() {
         ctx.drawImage(this.image, this.pos.x, this.pos.y, this.width, this.heigth);
     }
 
+    normalizeAngle(angle) {
+        return Math.atan2(Math.sin(angle), Math.cos(angle)); // Keeps it between -π and π
+    }
+
+    pickNewState() {
+        const availableStates = Object.values(GHOST_STATES).filter(state => state !== this.ghostState);
+        this.ghostState = availableStates[Math.floor(Math.random() * availableStates.length)];
+        this.stateTimer = Date.now() + (Math.random() * (this.maxStateTime - this.minStateTime) + this.minStateTime);
+    }
+
+    updateGhostImage() {
+
+    }
+
     calculatePos() {
         this.dx = this.pos.x - player.pos.x;
         this.dy = this.pos.y - player.pos.y;
         this.distance = Math.sqrt(this.dx * this.dx + this.dy * this.dy);
-    
+
         // Calculate angle to player and normalize it to [-PI, PI]
-        this.angleToPlayer = Math.atan2(this.dy, this.dx) - (player.angle * Math.PI / 180);
+        this.angleToPlayer = this.normalizeAngle(Math.atan2(this.dy, this.dx) - (player.angle * Math.PI / 180));
         this.angleToPlayer = ((this.angleToPlayer + Math.PI) % (2 * Math.PI)) - Math.PI;
     }
 
+    followPlayer() {
+        this.hasTeleportedFront = false;
+        this.hasTeleportedBack = false;
+
+        let dx = player.pos.x - this.pos.x;
+        let dy = player.pos.y - this.pos.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+    
+        if (distance > 300) { 
+            // If ghost is too far, move quickly to get closer
+            this.pos.x += (dx / distance) * (this.speed * 2); 
+            this.pos.y += (dy / distance) * (this.speed * 2);
+        } else if (distance > 180) {  
+            // Normal following behavior when within range
+            this.pos.x += (dx / distance) * this.speed;
+            this.pos.y += (dy / distance) * this.speed;
+        }
+    }
+    
+
+    appearBehindPlayer() {
+        if(this.hasTeleportedBack) return;
+
+        let offsetDistance = 200; // Distance behind player
+        this.pos.x = player.pos.x - Math.cos(player.angle * Math.PI / 180) * offsetDistance;
+        this.pos.y = player.pos.y - Math.sin(player.angle * Math.PI / 180) * offsetDistance;
+
+        this.hasTeleportedBack = true;
+    }
+
+    appearInFrontOfPlayer() {
+        if(this.hasTeleportedFront) return;
+
+        let offsetDistance = 200;
+        this.pos.x = player.pos.x + Math.cos(player.angle * Math.PI / 180) * offsetDistance;
+        this.pos.y = player.pos.y + Math.sin(player.angle * Math.PI / 180) * offsetDistance;
+
+        this.hasTeleportedFront = true;
+    }
+
+    zoomPastPlayer() {
+        this.hasTeleportedFront = false;
+        this.hasTeleportedBack = false;
+
+        let speed = 7; // Move faster than normal
+
+        // Move in a straight line past the player
+        this.pos.x += Math.cos(player.angle * Math.PI / 180) * speed;
+        this.pos.y += Math.sin(player.angle * Math.PI / 180) * speed;
+    }
+
+    applyLogic() {
+        if (this.type == EntityTypes.GHOST) {
+            setInterval(() => {
+                this.pickNewState();
+            }, this.maxStateTime);
+        }
+    }
+
     update() {
-        this.draw();
+        if (this.type == EntityTypes.GHOST) {
+            console.log(this.ghostState);
+            switch (this.ghostState) {
+                case GHOST_STATES.FOLLOW_PLAYER:
+                    this.followPlayer();
+                    break;
+                case GHOST_STATES.APPEAR_BEHIND:
+                    this.appearBehindPlayer();
+                    break;
+                case GHOST_STATES.APPEAR_INFRONT:
+                    this.appearInFrontOfPlayer();
+                    break;
+                case GHOST_STATES.ZOOM_PAST:
+                    this.zoomPastPlayer();
+                    break;
+            }
+        }
     }
 
 }
 
 gameEntities = [
     new Entity({ x: 580, y: 50, width: 20, heigth: 50, type: EntityTypes.FLOWER_VASE, imgName: 'flower-vase.png', isStatic: true }),
-    new Entity({ x: 380, y: 150, width: 20, heigth: 50, type: EntityTypes.GHOST, imgName: 'ghost.png', isStatic: false }),
+    new Entity({ x: 380, y: 150, width: 20, heigth: 50, type: EntityTypes.GHOST, imgName: 'sc-granny-idle.png', isStatic: false }),
     new Entity({ x: 660, y: 150, width: 20, heigth: 50, type: EntityTypes.TEDDY, imgName: 'teddy.png', isStatic: true })
 ];

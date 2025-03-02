@@ -14,6 +14,7 @@ class Map {
             wall3: [0, 0, 255],
             wall4: [0, 100, 100],
             pillar: [50, 50, 100],
+            door: [230, 100, 33],
         }
 
         this.currentTexture = 'wall1';

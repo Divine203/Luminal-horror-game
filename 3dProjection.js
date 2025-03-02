@@ -139,7 +139,7 @@ class _3DProjection {
         ctx.globalAlpha = 1;
         ctx.filter = "none";
         // ceiling
-        // ctx.drawImage(textureMap.sky, 0, 0, cvs.width, cvs.height/2)
+        // ctx.drawImage(textureMap.sky, 0, 0, cvs.width, cvs.height/2);
         ctx.fillStyle = '#000';
         ctx.fillRect(0, cvs.height / 2, cvs.width, cvs.height / 2);
 
