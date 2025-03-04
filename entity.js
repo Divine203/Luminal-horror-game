@@ -19,18 +19,21 @@ class Entity {
         this.distance;
         this.angleToPlayer; //radians
 
-        this.speed = 3;
+        this.speed = 2;
 
-        this.ghostState = GHOST_STATES.FOLLOW_PLAYER;
+        this.ghostState = GHOST_STATES.ZOOM_PAST;
+        this.isGhostWithWeapon = false;
         this.hasTeleportedFront = false;
         this.hasTeleportedBack = false;
         this.stateTimer = 0;
-        this.minStateTime = 3000; // 3 seconds minimum before switching
-        this.maxStateTime = 7000; // 7 seconds max before switching
+        this.maxStateTime = 10000; // 10 seconds max before switching
+
+        this.lastBloodTime = 0;
 
         if (this.type === EntityTypes.GHOST) {
             this.pickNewState();
         }
+
     }
 
     draw() {
@@ -47,8 +50,16 @@ class Entity {
         this.stateTimer = Date.now() + (Math.random() * (this.maxStateTime - this.minStateTime) + this.minStateTime);
     }
 
-    updateGhostImage() {
+    switchToWeapon() {
+        this.imgName = 'sc-granny-weapon.png';
+        this.image.src = `./resource/assets/${this.imgName}`;
+        this.isGhostWithWeapon = true;
+    }
 
+    switchToIdle() {
+        this.imgName = 'sc-granny-idle.png';
+        this.image.src = `./resource/assets/${this.imgName}`;
+        this.isGhostWithWeapon = false;
     }
 
     calculatePos() {
@@ -62,27 +73,42 @@ class Entity {
     }
 
     followPlayer() {
+        this.switchToWeapon();
+
         this.hasTeleportedFront = false;
         this.hasTeleportedBack = false;
 
         let dx = player.pos.x - this.pos.x;
         let dy = player.pos.y - this.pos.y;
         let distance = Math.sqrt(dx * dx + dy * dy);
-    
-        if (distance > 300) { 
+
+        if (distance > 300) {
             // If ghost is too far, move quickly to get closer
-            this.pos.x += (dx / distance) * (this.speed * 2); 
+            this.pos.x += (dx / distance) * (this.speed * 2);
             this.pos.y += (dy / distance) * (this.speed * 2);
-        } else if (distance > 180) {  
+        } else if (distance > 180) {
             // Normal following behavior when within range
             this.pos.x += (dx / distance) * this.speed;
             this.pos.y += (dy / distance) * this.speed;
         }
     }
-    
+
+    dropBlood() {
+        const now = Date.now();
+
+        if (this.isGhostWithWeapon) {
+            if (this.distance <= 200 && now - this.lastBloodTime >= 1000) {
+                player.drawBlood(); // Call the draw function
+                this.lastBloodTime = now; // Update last drop time
+            }
+        }
+    }
+
 
     appearBehindPlayer() {
-        if(this.hasTeleportedBack) return;
+        if (this.hasTeleportedBack) return;
+
+        this.switchToWeapon();
 
         let offsetDistance = 200; // Distance behind player
         this.pos.x = player.pos.x - Math.cos(player.angle * Math.PI / 180) * offsetDistance;
@@ -91,19 +117,24 @@ class Entity {
         this.hasTeleportedBack = true;
     }
 
-    appearInFrontOfPlayer() {
-        if(this.hasTeleportedFront) return;
+    appearInfrontOfPlayer() {
+        if (this.hasTeleportedBack) return;
 
-        let offsetDistance = 200;
+        this.switchToWeapon();
+
+        let offsetDistance = 200; // Distance behind player
         this.pos.x = player.pos.x + Math.cos(player.angle * Math.PI / 180) * offsetDistance;
         this.pos.y = player.pos.y + Math.sin(player.angle * Math.PI / 180) * offsetDistance;
 
-        this.hasTeleportedFront = true;
+        this.hasTeleportedBack = true;
     }
+
 
     zoomPastPlayer() {
         this.hasTeleportedFront = false;
         this.hasTeleportedBack = false;
+
+        this.switchToIdle();
 
         let speed = 7; // Move faster than normal
 
@@ -122,7 +153,6 @@ class Entity {
 
     update() {
         if (this.type == EntityTypes.GHOST) {
-            console.log(this.ghostState);
             switch (this.ghostState) {
                 case GHOST_STATES.FOLLOW_PLAYER:
                     this.followPlayer();
@@ -130,13 +160,19 @@ class Entity {
                 case GHOST_STATES.APPEAR_BEHIND:
                     this.appearBehindPlayer();
                     break;
-                case GHOST_STATES.APPEAR_INFRONT:
-                    this.appearInFrontOfPlayer();
-                    break;
                 case GHOST_STATES.ZOOM_PAST:
                     this.zoomPastPlayer();
                     break;
+                case GHOST_STATES.APPEAR_INFRONT:
+                    if (player.hp < 20) {
+                        this.appearInfrontOfPlayer();
+                    } else {
+                        this.followPlayer();
+                    }
+                    break;
             }
+
+            this.dropBlood();
         }
     }
 

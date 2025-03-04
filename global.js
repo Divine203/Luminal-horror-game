@@ -59,6 +59,7 @@ const EntityProjData = {
 let player;
 let gameEntities;
 
+let ui;
 
 let utils;
 let map;
@@ -66,7 +67,7 @@ let textureMap;
 let projection;
 
 
-let render3D = false;
+let render3D = true;
 let shouldDraw = true;
 let showPlayer = true;
 

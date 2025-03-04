@@ -16,11 +16,20 @@ const renderCanvas = (engine) => {
         projection.prepWallData(player.rays);
         projection.prepEntities();
         projection.projectTo3D();
-        player.drawPlayerHands3D();
+
+        ui.update();
+
+        player.bloodstains.forEach((b, i) => {
+            if (!b.draw()) player.bloodstains.splice(i, 1);
+        });
+
+        if (player.hp <= 20) {
+            player.drawRedMist();
+        }
     }
 
     requestAnimationFrame(engine);
-} 
+}
 
 gameEntities.forEach(e => {
     e.applyLogic();
@@ -36,18 +45,20 @@ if (shouldDraw) {
 
 const engine = () => {
     renderCanvas(engine);
-    if(!render3D) {
+    if (!render3D) {
         map.drawMap();
         gameEntities.forEach((entity) => {
             entity.draw();
         });
-    } 
-    movement();
+    }
+    if (!player.isDead) {
+        movement();
+    }
 }
 
 map.textureSelect();
-if(shouldDraw) {
-    map.mapCreator();
+if (shouldDraw) {
+    // map.mapCreator();
 }
 
 engine();

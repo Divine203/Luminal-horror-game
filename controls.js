@@ -66,7 +66,7 @@ const controls = () => {
 
 
             case 'q':
-                render3D = !render3D;
+                // render3D = !render3D;
                 break;
 
             case 'c':
@@ -109,6 +109,11 @@ const controls = () => {
             case 'ArrowDown':
                 keys.down.pressed = false;
 
+                break;
+
+            case 'Enter':
+                player.restart();
+    
                 break;
 
 
@@ -179,6 +184,7 @@ const movement = () => {
 
     player.angle += player.rotVel;
 }
+
 
 controls();
 

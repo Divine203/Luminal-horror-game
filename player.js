@@ -16,6 +16,11 @@ class Player {
         this.speedSin = 0;
         this.speedCos = 0;
 
+        this.hp = 100;
+        this.isDead = false;
+
+        this.score = 0;
+
         this.defaultRayLength = cvs.width * 2;
         this.rayLenth = cvs.width * 2;
         this.rays = [];
@@ -29,7 +34,46 @@ class Player {
         this.rayoffsetAngles = Array.from({ length: this.numRays }, (v, k) => (k * (this.FOV / this.numRays) - (this.FOV / 2))); // [1, ...90]
 
         this.isInSector = false;
+
+        this.bloodstains = [];
+    }
+
+    restart() {
+        this.hp = 100;
+        this.isDead = false;
+        this.score = 0;
+        this.pos = {
+            x: 400,
+            y: 200
+        };
+        this.bloodstains = [];
+    }
+
+    drawRedMist() {
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.1)';
+        ctx.fillRect(0, 0, cvs.width, cvs.height);
+    }
+
+    drawBloodUtil() {
+        const elapsed = Date.now() - this.startTime;
+        this.alpha = Math.max(0, 0.5 * (1 - elapsed / this.fadeTime)); // Reduce alpha over time
+
+        if (this.alpha > 0) {
+            ctx.globalAlpha = this.alpha;
+            ctx.drawImage(this.img, this.x, this.y, this.img.width, this.img.height);
+            ctx.globalAlpha = 1;
+            return true; // Still visible
+        }
+        return false; // Fully faded, remove from array
+    }
+
+    drawBlood() {
+        this.bloodstains.push(new Bloodstain());
+        this.hp -= 10;
         
+        if(this.hp <= 0) {
+            this.isDead = true;
+        }
     }
 
     drawCollisionBox() {
@@ -59,7 +103,6 @@ class Player {
     }
 
     drawPlayerHands3D() {
-
         const img = textureMap.playerHandGun;
 
         ctx.filter = `brightness(.5)`;
@@ -167,10 +210,44 @@ class Player {
             this.drawRotatingRect();
         }
 
+       
         this.drawRays();
         this.movement();
         this.checkWallCollisions();
+
+        if(!this.isDead) {
+            this.score++;
+        }
     }
 }
 
 player = new Player();
+
+
+
+
+
+
+class Bloodstain {
+    constructor() {
+        this.img = textureMap.blood1;
+        this.x = Math.random() * (cvs.width - this.img.width);
+        this.y = Math.random() * (cvs.height - this.img.height);
+        this.alpha = 0.5;
+        this.fadeTime = 5000; // 5 seconds
+        this.startTime = Date.now();
+    }
+
+    draw() {
+        const elapsed = Date.now() - this.startTime;
+        this.alpha = Math.max(0, 0.5 * (1 - elapsed / this.fadeTime)); // Reduce alpha over time
+
+        if (this.alpha > 0) {
+            ctx.globalAlpha = this.alpha;
+            ctx.drawImage(this.img, this.x, this.y, this.img.width, this.img.height);
+            ctx.globalAlpha = 1;
+            return true; // Still visible
+        }
+        return false; // Fully faded, remove from array
+    }
+}
