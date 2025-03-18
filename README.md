@@ -2,7 +2,7 @@
 
 > **A 3D Horror Game made from Scratch in JavaScript**  
 
-![Alt Text](https://raw.githubusercontent.com/Divine203/multiplayer-game/refs/heads/main/scrrr.png)
+![Alt Text](https://github.com/Divine203/Luminal-horror-game/blob/main/luminal-screenshot.png?raw=true)
 
 ## 🏗️ Installation & Setup
 
