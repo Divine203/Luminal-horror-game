@@ -69,17 +69,25 @@ const controls = () => {
                 // render3D = !render3D;
                 break;
 
+            case 'Enter':
+                player.restart();
+                gameStarted = true;
+                audio.playBackgroundMusic(true);
+
+                break;
+    
+
             case 'c':
-                shouldDraw = !shouldDraw;
-                if (shouldDraw) {
-                    form.style.display = 'none';
-                } else {
-                    form.style.display = 'block';
-                }
+                // shouldDraw = !shouldDraw;
+                // if (shouldDraw) {
+                //     form.style.display = 'none';
+                // } else {
+                //     form.style.display = 'block';
+                // }
                 break;
 
             case 'p':
-                showPlayer = !showPlayer;
+                // showPlayer = !showPlayer;
                 break;
 
             case 'm':
@@ -96,10 +104,12 @@ const controls = () => {
         switch (e.key) {
             case 'ArrowUp':
                 keys.up.pressed = false;
+                audio.playFootSteps(false);
 
                 break;
             case 'ArrowLeft':
                 keys.left.pressed = false;
+                
 
                 break;
             case 'ArrowRight':
@@ -108,14 +118,9 @@ const controls = () => {
                 break;
             case 'ArrowDown':
                 keys.down.pressed = false;
+                audio.playFootSteps(false); 
 
                 break;
-
-            case 'Enter':
-                player.restart();
-    
-                break;
-
 
             case 'a':
                 keys.a.pressed = false;
@@ -163,11 +168,13 @@ const controls = () => {
 const movement = () => {
     if (keys.up.pressed) {
         if (player.canMoveForward) {
+            audio.playFootSteps(true);
             player.pos.x += player.dx;
             player.pos.y += player.dy;
         }
     } else if (keys.down.pressed) {
         if (player.canMoveBack) {
+            audio.playFootSteps(true);
             player.pos.x += -player.dx;
             player.pos.y += -player.dy;
         }
@@ -187,6 +194,7 @@ const movement = () => {
 
 
 controls();
+
 
 
 

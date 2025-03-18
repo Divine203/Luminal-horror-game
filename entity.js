@@ -30,10 +30,6 @@ class Entity {
 
         this.lastBloodTime = 0;
 
-        if (this.type === EntityTypes.GHOST) {
-            this.pickNewState();
-        }
-
     }
 
     draw() {
@@ -108,6 +104,8 @@ class Entity {
     appearBehindPlayer() {
         if (this.hasTeleportedBack) return;
 
+        audio.playAudio(audio.sound.jumpscareSoft);
+
         this.switchToWeapon();
 
         let offsetDistance = 200; // Distance behind player
@@ -119,6 +117,8 @@ class Entity {
 
     appearInfrontOfPlayer() {
         if (this.hasTeleportedBack) return;
+
+        audio.playAudio(audio.sound.jumpscareLoud1);
 
         this.switchToWeapon();
 
@@ -164,7 +164,7 @@ class Entity {
                     this.zoomPastPlayer();
                     break;
                 case GHOST_STATES.APPEAR_INFRONT:
-                    if (player.hp < 20) {
+                    if (player.hp < 40) {
                         this.appearInfrontOfPlayer();
                     } else {
                         this.followPlayer();
@@ -180,6 +180,6 @@ class Entity {
 
 gameEntities = [
     new Entity({ x: 580, y: 50, width: 20, heigth: 50, type: EntityTypes.FLOWER_VASE, imgName: 'flower-vase.png', isStatic: true }),
-    new Entity({ x: 380, y: 150, width: 20, heigth: 50, type: EntityTypes.GHOST, imgName: 'sc-granny-idle.png', isStatic: false }),
+    new Entity({ x: 980, y: 150, width: 20, heigth: 50, type: EntityTypes.GHOST, imgName: 'sc-granny-idle.png', isStatic: false }),
     new Entity({ x: 660, y: 150, width: 20, heigth: 50, type: EntityTypes.TEDDY, imgName: 'teddy.png', isStatic: true })
 ];

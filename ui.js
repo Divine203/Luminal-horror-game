@@ -2,6 +2,9 @@ class UI {
     constructor() {
         this.deathImg = new Image();
         this.deathImg.src = './resource/assets/u-died.png';
+
+        this.luminalImg = new Image();
+        this.luminalImg.src = './resource/assets/luminal.png';
     }
 
     drawHp() {
@@ -49,6 +52,21 @@ class UI {
         ctx.fillText('Press Enter to restart', cvs.width / 2.5, (cvs.height / 3) + 240);
     }
 
+    drawIntroScreen() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+        ctx.drawImage(this.luminalImg, cvs.width / 3, cvs.height / 3, this.deathImg.width, this.deathImg.height);
+
+        ctx.fillStyle = 'red';
+        ctx.font = `18px consolas`
+        ctx.fillText('Just Survive', cvs.width / 2.3, (cvs.height / 3) + 170);
+
+        ctx.fillStyle = 'white';
+        ctx.font = `18px consolas`
+        ctx.fillText('Press Enter to start', cvs.width / 2.5, (cvs.height / 3) + 240);
+    }
+
     update() {
         this.drawHp();
         this.drawScore();   
@@ -56,6 +74,10 @@ class UI {
         if (player.isDead) {
             this.drawDeathScreen();
             player.angle++;
+        }
+
+        if(!gameStarted) {
+            this.drawIntroScreen();
         }
     }
 }

@@ -71,3 +71,4 @@ let render3D = true;
 let shouldDraw = true;
 let showPlayer = true;
 
+let gameStarted = false;

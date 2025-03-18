@@ -68,11 +68,15 @@ class Player {
     }
 
     drawBlood() {
-        this.bloodstains.push(new Bloodstain());
-        this.hp -= 10;
-        
-        if(this.hp <= 0) {
-            this.isDead = true;
+        if (!player.isDead) {
+            audio.playAudio(audio.sound.blood);
+
+            this.bloodstains.push(new Bloodstain());
+            this.hp -= 10;
+
+            if (this.hp <= 0) {
+                this.isDead = true;
+            }
         }
     }
 
@@ -106,21 +110,21 @@ class Player {
         const img = textureMap.playerHandGun;
 
         ctx.filter = `brightness(.5)`;
-        ctx.drawImage(img, 450, (cvs.height - 260), img.width/4, img.height/4);
+        ctx.drawImage(img, 450, (cvs.height - 260), img.width / 4, img.height / 4);
         ctx.filter = "none";
     }
 
     checkWallCollisions() {
-        const centerFrontRay = this.rays[(this.rays.length/2)-1];
+        const centerFrontRay = this.rays[(this.rays.length / 2) - 1];
         const backRay = this.backRay;
 
-        if(centerFrontRay.d < 30) {
+        if (centerFrontRay.d < 30) {
             this.canMoveForward = false;
         } else {
             this.canMoveForward = true;
         }
 
-        if(backRay.l < 30) {
+        if (backRay.l < 30) {
             this.canMoveBack = false;
         } else {
             this.canMoveBack = true;
@@ -138,7 +142,7 @@ class Player {
         this.backRay.x2 = x2;
         this.backRay.y2 = y2;
         this.rayCastMap(this.backRay, map.mapLines);
-        
+
         if (!render3D) {
             this.backRay.drawRay(this.backRay.angle, this.angle, this.width, this.height, this.pos.x, this.pos.y);
         }
@@ -208,14 +212,14 @@ class Player {
     update() {
         if (!render3D) {
             this.drawRotatingRect();
-        }
-
-       
+        } 
+        
         this.drawRays();
         this.movement();
         this.checkWallCollisions();
 
-        if(!this.isDead) {
+
+        if (!this.isDead && gameStarted) {
             this.score++;
         }
     }

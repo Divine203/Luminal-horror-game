@@ -90,7 +90,9 @@ class _3DProjection {
         world.sort((a, b) => b.distanceFromPlayer - a.distanceFromPlayer);
 
         world.forEach((el) => {
+
             let brightness = Math.max(0, Math.min(2, 1 - (el.distanceFromPlayer / this.maxDistance)));
+
             if (el.isWall) {
                 if (el.ray.iP) {
                     ctx.globalAlpha = 1;

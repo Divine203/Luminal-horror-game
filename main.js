@@ -7,9 +7,12 @@ const renderCanvas = (engine) => {
         player.update();
     }
 
-    gameEntities.forEach(e => {
-        e.update();
-    })
+
+    if (gameStarted) {
+        gameEntities.forEach(e => {
+            e.update();
+        });
+    }
 
     if (render3D) {
         projection.projectFloorAndCeiling();
@@ -35,11 +38,11 @@ gameEntities.forEach(e => {
     e.applyLogic();
 })
 
-if (shouldDraw) {
+// if (shouldDraw) {
     form.style.display = 'none';
-} else {
-    form.style.display = 'block';
-}
+// } else {
+//     form.style.display = 'block';
+// }
 
 
 
@@ -51,10 +54,12 @@ const engine = () => {
             entity.draw();
         });
     }
-    if (!player.isDead) {
+    if (!player.isDead && gameStarted) {
         movement();
     }
 }
+
+
 
 map.textureSelect();
 if (shouldDraw) {
