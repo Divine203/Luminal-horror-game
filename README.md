@@ -14,6 +14,6 @@ Just Open index.html
 
 ## 🎥 How i made it
 
-[Watch on YouTube](https://www.youtube.com/watch?v=X02dF606IqY)
+[Watch on YouTube](https://www.youtube.com/watch?v=WeZ8aHGX76U&t=34s)
 
 ---
